@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useApp } from "../store";
 import { tagLabel } from "../i18n";
+import { ZONE_OF } from "../data/config";
 
 const easing = [0.22, 1, 0.36, 1];
 
@@ -37,7 +38,10 @@ export default function Menu() {
           <h1 className="brand">{L(config.brand)}</h1>
           <div className="tagline">{L(config.brand.tagline)}</div>
           <div>
-            <span className="table-chip"><span className="dot" />{t.table} {table}</span>
+            <span className="table-chip">
+              <span className="dot" />{t.table} {table}
+              {ZONE_OF[table] && <span style={{ opacity: 0.7 }}> · {L(ZONE_OF[table].name)}</span>}
+            </span>
           </div>
         </motion.div>
       </header>

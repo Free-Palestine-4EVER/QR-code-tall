@@ -391,6 +391,11 @@ html[lang="ar"] .ig-cta { letter-spacing: 0.02em; }
 .db-chip.on { color: var(--gold-bright); border-color: var(--line-strong); background: rgba(201, 169, 106, 0.07); }
 
 /* floor map */
+.floor-zones { display: flex; flex-direction: column; gap: 26px; margin-top: 22px; }
+.zone-block { }
+.zone-head { display: flex; align-items: baseline; gap: 14px; padding-bottom: 10px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
+.zone-head h3 { font-family: var(--display); font-size: 18px; font-weight: 400; letter-spacing: 0.14em; color: var(--gold-bright); }
+.zone-meta { margin-inline-start: auto; font-size: 12px; color: var(--ivory-dim); }
 .floor { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; margin-top: 22px; }
 .tcard { border: 1px solid var(--line); border-radius: 10px; padding: 18px; min-height: 116px; background: linear-gradient(180deg, var(--ink-3), var(--ink-2)); display: flex; flex-direction: column; gap: 4px; position: relative; transition: all 0.3s; }
 .tcard-no { font-family: var(--display); font-size: 30px; color: var(--ivory); }

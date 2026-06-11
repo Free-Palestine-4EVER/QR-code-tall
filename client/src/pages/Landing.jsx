@@ -24,11 +24,20 @@ export default function Landing() {
         <p style={{ textAlign: "center", marginTop: 36, fontSize: 11, letterSpacing: lang === "ar" ? "0.04em" : "0.26em", textTransform: "uppercase", color: "var(--ivory-faint)" }}>
           {t.chooseTable}
         </p>
-        <div className="tables-grid">
-          {Array.from({ length: config.tables }, (_, i) => (
-            <Link key={i} to={`/t/${i + 1}`} className="tcell">{i + 1}</Link>
-          ))}
-        </div>
+        {config.zones.map((z) => (
+          <div key={z.id}>
+            <div className="rule" style={{ margin: "22px 0 12px", fontSize: 12 }}>
+              <span className="diamond" />
+              <span style={{ flex: "none", color: "var(--gold)", letterSpacing: lang === "ar" ? 0 : "0.2em", textTransform: "uppercase", fontSize: 11 }}>{L(z.name)}</span>
+              <span className="diamond" />
+            </div>
+            <div className="tables-grid">
+              {z.tables.map((n) => (
+                <Link key={n} to={`/t/${n}`} className="tcell">{n}</Link>
+              ))}
+            </div>
+          </div>
+        ))}
 
         <div style={{ marginTop: 40, display: "flex", justifyContent: "center" }}>
           <Link to="/employee" className="abtn">{t.staffApp} →</Link>

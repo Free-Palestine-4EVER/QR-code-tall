@@ -268,22 +268,37 @@ function Orders({ orders, fresh }) {
 /* ───────────────────────── Floor ───────────────────────── */
 function Floor({ orders }) {
   const today = stats(orders, "day").start;
-  const tables = Array.from({ length: CONFIG.tables }, (_, i) => i + 1).map((t) => {
+  const cell = (t) => {
     const tableOrders = orders.filter((o) => o.table === t && o.createdAt >= today && o.status !== "cancelled");
     const live = tableOrders.find((o) => !["done", "cancelled"].includes(o.status));
     const revenue = tableOrders.reduce((s, o) => s + o.total, 0);
     return { t, live, revenue, count: tableOrders.length };
-  });
+  };
   return (
-    <div className="floor">
-      {tables.map(({ t, live, revenue, count }) => (
-        <div key={t} className={`tcard ${live ? `live s-${live.status}` : ""}`}>
-          <div className="tcard-no">{t}</div>
-          <div className="tcard-status">{live ? live.status : count ? "served" : "free"}</div>
-          {live && <div className="tcard-meta">{live.items.reduce((n, l) => n + l.qty, 0)} items · {live.code}</div>}
-          {revenue > 0 && <div className="tcard-rev">{money(revenue)} {CUR}</div>}
-        </div>
-      ))}
+    <div className="floor-zones">
+      {CONFIG.zones.map((z) => {
+        const cells = z.tables.map(cell);
+        const zoneRev = cells.reduce((s, c) => s + c.revenue, 0);
+        const zoneActive = cells.filter((c) => c.live).length;
+        return (
+          <section key={z.id} className="zone-block">
+            <header className="zone-head">
+              <h3>{z.name.en}</h3>
+              <span className="zone-meta">{zoneActive} active · {money(zoneRev)} {CUR} today</span>
+            </header>
+            <div className="floor">
+              {cells.map(({ t, live, revenue, count }) => (
+                <div key={t} className={`tcard ${live ? `live s-${live.status}` : ""}`}>
+                  <div className="tcard-no">{t}</div>
+                  <div className="tcard-status">{live ? live.status : count ? "served" : "free"}</div>
+                  {live && <div className="tcard-meta">{live.items.reduce((n, l) => n + l.qty, 0)} items · {live.code}</div>}
+                  {revenue > 0 && <div className="tcard-rev">{money(revenue)} {CUR}</div>}
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      })}
     </div>
   );
 }
