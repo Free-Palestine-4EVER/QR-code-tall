@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { io } from "socket.io-client";
 import { useApp } from "../store";
+import { watchOrder } from "../firebase";
 
 const STEPS = ["new", "preparing", "ready", "done"];
 
@@ -11,13 +11,7 @@ export default function Status() {
   const { t, L, cur } = useApp();
   const [order, setOrder] = useState(null);
 
-  useEffect(() => {
-    fetch(`/api/orders/${orderId}`).then((r) => (r.ok ? r.json() : null)).then(setOrder);
-    const s = io();
-    s.emit("order:watch", orderId);
-    s.on("order:update", (o) => o.id === orderId && setOrder(o));
-    return () => s.disconnect();
-  }, [orderId]);
+  useEffect(() => watchOrder(orderId, setOrder), [orderId]);
 
   if (!order) return <div className="center-stage"><div className="monogram"><span>N</span></div></div>;
 

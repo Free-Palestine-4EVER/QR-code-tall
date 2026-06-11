@@ -1,18 +1,15 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { STR } from "./i18n";
+import { CONFIG } from "./data/config";
+import MENU from "./data/menu.json";
 
 const Ctx = createContext(null);
 
 export function AppProvider({ children }) {
   const [lang, setLang] = useState(() => localStorage.getItem("noir.lang") || "ar");
-  const [config, setConfig] = useState(null);
-  const [menu, setMenu] = useState(null);
+  const [config] = useState(CONFIG);
+  const [menu] = useState(MENU);
   const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem("noir.cart") || "{}"));
-
-  useEffect(() => {
-    fetch("/api/config").then((r) => r.json()).then(setConfig);
-    fetch("/api/menu").then((r) => r.json()).then(setMenu);
-  }, []);
 
   useEffect(() => {
     localStorage.setItem("noir.lang", lang);

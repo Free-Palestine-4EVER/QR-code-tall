@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useApp } from "../store";
+import { createOrder, setOrder } from "../firebase";
 
 const easing = [0.22, 1, 0.36, 1];
 
@@ -28,31 +29,25 @@ export default function Checkout() {
   const placeOrder = async () => {
     setBusy(true);
     try {
-      const res = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          table,
-          items: cartLines.map((l) => ({ id: l.id, qty: l.qty })),
-          payMethod: pay,
-          name,
-          note,
-        }),
+      const { id, code } = await createOrder({
+        table,
+        items: cartLines.map((l) => ({ id: l.id, qty: l.qty, price: l.price, name: l.name })),
+        total: cartTotal,
+        payMethod: pay,
+        name,
+        note,
       });
-      const order = await res.json();
-      if (!res.ok) throw new Error(order.error);
       clearCart();
-      if (pay === "alfan") setPlaced(order);
-      else nav(`/t/${table}/order/${order.id}`, { replace: true });
-    } catch {
+      if (pay === "alfan") setPlaced({ id, code, total: cartTotal, table });
+      else nav(`/t/${table}/order/${id}`, { replace: true });
+    } catch (e) {
+      console.error(e);
       setBusy(false);
     }
   };
 
   const finishPayment = async (claimed) => {
-    if (claimed) {
-      await fetch(`/api/orders/${placed.id}/payment-claimed`, { method: "POST" }).catch(() => {});
-    }
+    if (claimed) await setOrder(placed.id, { paymentClaimed: true }).catch(() => {});
     nav(`/t/${table}/order/${placed.id}`, { replace: true });
   };
 
@@ -73,26 +68,48 @@ export default function Checkout() {
               className="btn btn-dark"
               onClick={() => {
                 navigator.clipboard?.writeText(String(placed.total)).catch(() => {});
-                window.open(config.alfanLink, "_blank", "noopener");
                 setOpened(true);
               }}
             >
               <AppleMark /> {t.payNow}
             </button>
-            <AnimatePresence>
-              {opened && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-                  <button className="btn btn-gold" style={{ marginTop: 12 }} onClick={() => finishPayment(true)}>
-                    {t.payDone}
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
             <button className="abtn" style={{ marginTop: 26, border: "none", color: "var(--ivory-faint)" }} onClick={() => finishPayment(false)}>
               {t.paySkip}
             </button>
           </motion.div>
         </div>
+
+        {/* In-page payment — Alfan's real Apple Pay / card sheet, embedded. Customer never leaves the site. */}
+        <AnimatePresence>
+          {opened && (
+            <>
+              <motion.div className="scrim" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} />
+              <motion.div
+                className="pay-modal"
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                exit={{ y: "100%" }}
+                transition={{ duration: 0.5, ease: easing }}
+              >
+                <div className="pay-modal-bar">
+                  <button className="pm-close" onClick={() => setOpened(false)} aria-label="close">✕</button>
+                  <span className="pm-amt"><AppleMark /> {placed.total} {cur}</span>
+                  <span className="pm-secure">🔒 {t.payAppleHint}</span>
+                </div>
+                <iframe
+                  className="pay-frame"
+                  src={config.alfanLink}
+                  title="payment"
+                  allow="payment"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+                <div className="pay-modal-foot">
+                  <button className="btn btn-gold" onClick={() => finishPayment(true)}>{t.payDone}</button>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
       </div>
     );
   }

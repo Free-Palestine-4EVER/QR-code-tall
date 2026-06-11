@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { io } from "socket.io-client";
 import { useApp } from "../store";
+import { CONFIG } from "../data/config";
+import { watchOrders, setOrder } from "../firebase";
 
 const chime = () => {
   try {
@@ -48,45 +49,42 @@ export default function Staff() {
 
   useEffect(() => {
     if (!pin) return;
-    fetch("/api/staff/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pin }) })
-      .then((r) => {
-        if (!r.ok) throw 0;
-        sessionStorage.setItem("noir.pin", pin);
-        setAuthed(true);
-      })
-      .catch(() => {
-        sessionStorage.removeItem("noir.pin");
-        setPin("");
-      });
+    if (pin === CONFIG.staffPin) {
+      sessionStorage.setItem("noir.pin", pin);
+      setAuthed(true);
+    } else {
+      sessionStorage.removeItem("noir.pin");
+      setPin("");
+    }
   }, [pin]);
 
   useEffect(() => {
     if (!authed) return;
     Notification?.requestPermission?.();
-    fetch("/api/staff/orders", { headers: { "x-staff-pin": pin } }).then((r) => r.json()).then(setOrders);
-    const s = io();
-    s.emit("staff:join", pin);
-    s.on("order:new", (o) => {
-      freshIds.current.add(o.id);
-      setOrders((prev) => [o, ...prev]);
-      chime();
-      if (Notification.permission === "granted")
-        new Notification(`New order — Table ${o.table}`, { body: o.items.map((l) => `${l.qty}× ${l.name.en}`).join(", ") });
-      setTimeout(() => {
-        freshIds.current.delete(o.id);
-        tick((n) => n + 1);
-      }, 12000);
+    let first = true;
+    const unsub = watchOrders((all, added) => {
+      setOrders(all);
+      if (first) {
+        first = false;
+        return; // don't chime for the initial backlog
+      }
+      added.forEach((o) => {
+        freshIds.current.add(o.id);
+        chime();
+        if (Notification.permission === "granted")
+          new Notification(`New order — Table ${o.table}`, {
+            body: o.items.map((l) => `${l.qty}× ${l.name.en}`).join(", "),
+          });
+        setTimeout(() => {
+          freshIds.current.delete(o.id);
+          tick((n) => n + 1);
+        }, 12000);
+      });
     });
-    s.on("order:update", (o) => setOrders((prev) => prev.map((p) => (p.id === o.id ? o : p))));
-    return () => s.disconnect();
+    return unsub;
   }, [authed]); // eslint-disable-line
 
-  const patch = (id, body) =>
-    fetch(`/api/staff/orders/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json", "x-staff-pin": pin },
-      body: JSON.stringify(body),
-    });
+  const patch = (id, body) => setOrder(id, body).catch((e) => console.error(e));
 
   const shown = useMemo(() => {
     if (filter === "active") return orders.filter((o) => !["done", "cancelled"].includes(o.status));

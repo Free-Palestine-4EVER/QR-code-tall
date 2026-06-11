@@ -1,0 +1,65 @@
+{
+  "categories": [
+    {
+      "id": "signature",
+      "name": { "en": "Signature Coffee", "ar": "قهوة التوقيع" },
+      "items": [
+        { "id": "noir-royale", "name": { "en": "Noir Royale", "ar": "نوار رويال" }, "desc": { "en": "Double ristretto, saffron cream, 24k gold dust", "ar": "ريستريتو مزدوج، كريمة الزعفران، غبار ذهب ٢٤ قيراط" }, "price": 38, "tag": "house" },
+        { "id": "velvet-flat", "name": { "en": "Velvet Flat White", "ar": "فلات وايت مخملي" }, "desc": { "en": "Single-origin Ethiopia, silk-steamed milk", "ar": "بن إثيوبي أحادي المصدر، حليب مبخّر كالحرير" }, "price": 24 },
+        { "id": "smoked-cortado", "name": { "en": "Smoked Cortado", "ar": "كورتادو مدخّن" }, "desc": { "en": "Oakwood-smoked glass, demerara", "ar": "كأس مدخّن بخشب البلوط، سكر ديميرارا" }, "price": 27 },
+        { "id": "spanish-noir", "name": { "en": "Spanish Noir", "ar": "سبانيش نوار" }, "desc": { "en": "Espresso over condensed cloud, cinnamon bark", "ar": "إسبريسو فوق غيمة الحليب المكثّف، قرفة" }, "price": 26 },
+        { "id": "v60-reserve", "name": { "en": "V60 Reserve Pour", "ar": "ترشيح V60 ريزيرف" }, "desc": { "en": "Rotating rare lot, brewed tableside", "ar": "محصول نادر متغيّر، يُحضّر أمامك على الطاولة" }, "price": 42, "tag": "rare" }
+      ]
+    },
+    {
+      "id": "matcha-tea",
+      "name": { "en": "Matcha & Tea", "ar": "ماتشا وشاي" },
+      "items": [
+        { "id": "ceremonial-matcha", "name": { "en": "Ceremonial Matcha", "ar": "ماتشا احتفالية" }, "desc": { "en": "Uji first-harvest, whisked to order", "ar": "حصاد أوجي الأول، تُخفق عند الطلب" }, "price": 32, "tag": "house" },
+        { "id": "rose-earl", "name": { "en": "Rose Earl Grey", "ar": "إيرل غراي بالورد" }, "desc": { "en": "Taif rose petals, bergamot, cut crystal pot", "ar": "بتلات ورد طائفي، برغموت، إبريق كريستال" }, "price": 28 },
+        { "id": "moroccan-mint", "name": { "en": "Atlas Mint Tea", "ar": "شاي أطلس بالنعناع" }, "desc": { "en": "Gunpowder green, fresh mint, poured high", "ar": "شاي أخضر، نعناع طازج، يُصبّ من علٍ" }, "price": 22 },
+        { "id": "karak-dor", "name": { "en": "Karak d'Or", "ar": "كرك الذهب" }, "desc": { "en": "Slow-simmered cardamom karak, gold rim cup", "ar": "كرك بالهيل على نار هادئة، فنجان بحافة ذهبية" }, "price": 18 }
+      ]
+    },
+    {
+      "id": "cold",
+      "name": { "en": "Cold Bar", "ar": "البار البارد" },
+      "items": [
+        { "id": "amber-cold-brew", "name": { "en": "Amber Cold Brew", "ar": "كولد برو العنبر" }, "desc": { "en": "18-hour steep, orange oils, tonic pearl", "ar": "نقع ١٨ ساعة، زيوت البرتقال، تونيك" }, "price": 29 },
+        { "id": "iced-pistachio", "name": { "en": "Iced Pistachio Latte", "ar": "لاتيه الفستق المثلّج" }, "desc": { "en": "Sicilian pistachio cream, espresso, sea salt", "ar": "كريمة فستق صقلي، إسبريسو، ملح بحري" }, "price": 31, "tag": "house" },
+        { "id": "yuzu-espresso", "name": { "en": "Yuzu Espresso Tonic", "ar": "إسبريسو تونيك باليوزو" }, "desc": { "en": "Sparkling yuzu, single-origin shot", "ar": "يوزو فوّار، جرعة بن أحادي المصدر" }, "price": 27 },
+        { "id": "hibiscus-cooler", "name": { "en": "Hibiscus Cooler", "ar": "منعش الكركديه" }, "desc": { "en": "Cold hibiscus, lime caviar, mint frost", "ar": "كركديه بارد، كافيار الليمون، نعناع مثلّج" }, "price": 24 }
+      ]
+    },
+    {
+      "id": "mocktails",
+      "name": { "en": "Mocktails", "ar": "موكتيلات" },
+      "items": [
+        { "id": "desert-mirage", "name": { "en": "Desert Mirage", "ar": "سراب الصحراء" }, "desc": { "en": "Smoked grapefruit, rosemary, golden foam", "ar": "جريب فروت مدخّن، إكليل الجبل، رغوة ذهبية" }, "price": 34, "tag": "house" },
+        { "id": "midnight-oud", "name": { "en": "Midnight Oud", "ar": "عود منتصف الليل" }, "desc": { "en": "Blackberry, oud smoke dome, vanilla bean", "ar": "توت أسود، قبة دخان العود، فانيليا" }, "price": 36, "tag": "rare" },
+        { "id": "white-peach", "name": { "en": "White Peach Bellini", "ar": "بيليني الخوخ الأبيض" }, "desc": { "en": "Zero-proof sparkling, white peach nectar", "ar": "فوّار خالٍ من الكحول، رحيق الخوخ الأبيض" }, "price": 30 },
+        { "id": "saffron-fizz", "name": { "en": "Saffron Fizz", "ar": "فوّار الزعفران" }, "desc": { "en": "Saffron syrup, citrus, egg-white silk", "ar": "شراب الزعفران، حمضيات، رغوة حريرية" }, "price": 32 }
+      ]
+    },
+    {
+      "id": "desserts",
+      "name": { "en": "Patisserie", "ar": "حلويات" },
+      "items": [
+        { "id": "gold-tiramisu", "name": { "en": "Tiramisu d'Or", "ar": "تيراميسو الذهب" }, "desc": { "en": "Mascarpone clouds, espresso-soaked savoiardi, gold leaf", "ar": "غيوم الماسكرابوني، سافوياردي منقوع بالإسبريسو، ورق ذهب" }, "price": 39, "tag": "house" },
+        { "id": "pistachio-knafeh", "name": { "en": "Pistachio Knafeh Cigar", "ar": "سيجار الكنافة بالفستق" }, "desc": { "en": "Crisp kataifi, molten cheese, orange-blossom syrup", "ar": "كنافة مقرمشة، جبن ذائب، قطر بماء الزهر" }, "price": 28 },
+        { "id": "date-fondant", "name": { "en": "Khidri Date Fondant", "ar": "فوندان تمر الخضري" }, "desc": { "en": "Warm date cake, salted caramel, qishta ice", "ar": "كيك التمر الدافئ، كراميل مملّح، آيس كريم القشطة" }, "price": 33 },
+        { "id": "saffron-creme", "name": { "en": "Saffron Crème Brûlée", "ar": "كريم بروليه بالزعفران" }, "desc": { "en": "Torched sugar glass, Persian saffron custard", "ar": "طبقة سكر مكرملة، كاسترد الزعفران الفارسي" }, "price": 31 }
+      ]
+    },
+    {
+      "id": "bites",
+      "name": { "en": "Light Bites", "ar": "لقيمات خفيفة" },
+      "items": [
+        { "id": "truffle-croissant", "name": { "en": "Truffle Croissant", "ar": "كرواسون الكمأة" }, "desc": { "en": "48-layer laminated, black truffle butter", "ar": "٤٨ طبقة، زبدة الكمأة السوداء" }, "price": 26 },
+        { "id": "zaatar-danish", "name": { "en": "Za'atar Danish", "ar": "دانش الزعتر" }, "desc": { "en": "Wild za'atar, labneh heart, chili honey", "ar": "زعتر بري، قلب لبنة، عسل حار" }, "price": 22 },
+        { "id": "smoked-salmon-bun", "name": { "en": "Smoked Salmon Brioche", "ar": "بريوش السلمون المدخّن" }, "desc": { "en": "Cold-smoked salmon, dill crème, caviar pearls", "ar": "سلمون مدخّن على البارد، كريمة الشبت، لآلئ الكافيار" }, "price": 44, "tag": "rare" },
+        { "id": "halloumi-fig", "name": { "en": "Halloumi & Fig Toast", "ar": "توست الحلوم والتين" }, "desc": { "en": "Seared halloumi, fig jam, sourdough", "ar": "حلوم مشوي، مربى التين، خبز الساوردو" }, "price": 27 }
+      ]
+    }
+  ]
+}

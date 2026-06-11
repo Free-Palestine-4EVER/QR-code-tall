@@ -1,0 +1,14 @@
+rules_version = '2';
+// DEMO rules — anyone can place/read/update orders (employee app is PIN-gated client-side).
+// For production: require Firebase Auth for reads/updates and lock writes to the order shape.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /orders/{id} {
+      allow create, read, update: if true;
+      allow delete: if false;
+    }
+    match /counters/{id} {
+      allow read, write: if true;
+    }
+  }
+}
