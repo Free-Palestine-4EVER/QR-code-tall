@@ -9,6 +9,8 @@ import {
   limit,
   runTransaction,
   updateDoc,
+  addDoc,
+  deleteDoc,
   serverTimestamp,
 } from "firebase/firestore";
 import * as demo from "./localStore";
@@ -70,7 +72,22 @@ function watchOrdersFB(handler) {
 
 const setOrderFB = (id, patch) => updateDoc(doc(db, "orders", id), patch);
 
+// ── generic collections (staff, reminders) ──
+function watchCollectionFB(name, cb) {
+  const q = query(collection(db, name), orderBy("createdAt", "desc"));
+  return onSnapshot(q, (snap) =>
+    cb(snap.docs.map((d) => ({ id: d.id, ...d.data(), createdAt: ms(d.data().createdAt) })))
+  );
+}
+const addItemFB = (name, data) => addDoc(collection(db, name), { ...data, createdAt: serverTimestamp() }).then((r) => r.id);
+const patchItemFB = (name, id, patch) => updateDoc(doc(db, name, id), patch);
+const removeItemFB = (name, id) => deleteDoc(doc(db, name, id));
+
 export const createOrder = firebaseReady ? createOrderFB : demo.createOrder;
 export const watchOrder = firebaseReady ? watchOrderFB : demo.watchOrder;
 export const watchOrders = firebaseReady ? watchOrdersFB : demo.watchOrders;
 export const setOrder = firebaseReady ? setOrderFB : demo.setOrder;
+export const watchCollection = firebaseReady ? watchCollectionFB : demo.watchCollection;
+export const addItem = firebaseReady ? addItemFB : demo.addItem;
+export const patchItem = firebaseReady ? patchItemFB : demo.patchItem;
+export const removeItem = firebaseReady ? removeItemFB : demo.removeItem;

@@ -8,7 +8,7 @@ const STEPS = ["new", "preparing", "ready", "done"];
 
 export default function Status() {
   const { table, orderId } = useParams();
-  const { t, L, cur } = useApp();
+  const { t, L, cur, config } = useApp();
   const [order, setOrder] = useState(null);
 
   useEffect(() => watchOrder(orderId, setOrder), [orderId]);
@@ -61,7 +61,32 @@ export default function Status() {
             </div>
           </div>
 
-          <Link to={`/t/${table}`} className="abtn" style={{ display: "inline-block", marginTop: 30, textDecoration: "none" }}>
+          <motion.a
+            href={`https://instagram.com/${config.instagram}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ig-promo"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.7 }}
+          >
+            <span className="ig-glow" />
+            <span className="ig-ic" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none" />
+              </svg>
+            </span>
+            <span className="ig-body">
+              <span className="ig-gift">🎁</span>
+              <span className="ig-title">{t.igTitle}</span>
+              <span className="ig-text">{t.igBody}</span>
+              <span className="ig-cta">{t.igCta} · {t.igHandle}</span>
+            </span>
+          </motion.a>
+
+          <Link to={`/t/${table}`} className="abtn" style={{ display: "inline-block", marginTop: 22, textDecoration: "none" }}>
             {t.newOrder}
           </Link>
         </motion.div>

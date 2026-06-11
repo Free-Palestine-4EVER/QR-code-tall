@@ -5,4 +5,5 @@ export const CONFIG = {
   tables: 12,
   staffPin: "2468",
   alfanLink: "https://alfan.link/jordanaiacademy?payment-link=BptmRm",
+  instagram: "noir",
 };

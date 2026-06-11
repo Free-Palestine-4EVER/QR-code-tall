@@ -10,5 +10,12 @@ service cloud.firestore {
     match /counters/{id} {
       allow read, write: if true;
     }
+    // Employee dashboard data (staff roster, shift reminders).
+    match /staff/{id} {
+      allow read, write: if true;
+    }
+    match /reminders/{id} {
+      allow read, write: if true;
+    }
   }
 }
