@@ -11,6 +11,7 @@ import {
   updateDoc,
   serverTimestamp,
 } from "firebase/firestore";
+import * as demo from "./localStore";
 
 const cfg = {
   apiKey: import.meta.env.VITE_FB_API_KEY,
@@ -21,14 +22,15 @@ const cfg = {
   appId: import.meta.env.VITE_FB_APP_ID,
 };
 
-// If Firebase isn't configured yet, the app shows a setup screen instead of crashing.
+// Real Firestore when configured; otherwise a localStorage demo backend that
+// still syncs across tabs on the same machine. The app upgrades automatically
+// once VITE_FB_* env vars are set.
 export const firebaseReady = Boolean(cfg.projectId && cfg.apiKey);
 const db = firebaseReady ? getFirestore(initializeApp(cfg)) : null;
 
 const ms = (ts) => (ts?.toMillis ? ts.toMillis() : ts || Date.now());
 
-/** Create an order with a sequential code (N-001…) via a transaction. */
-export async function createOrder({ table, items, total, payMethod, name, note }) {
+async function createOrderFB({ table, items, total, payMethod, name, note }) {
   const counterRef = doc(db, "counters", "orders");
   const ref = doc(collection(db, "orders"));
   let code = "N-001";
@@ -38,32 +40,22 @@ export async function createOrder({ table, items, total, payMethod, name, note }
     code = `N-${String(seq).padStart(3, "0")}`;
     tx.set(counterRef, { seq }, { merge: true });
     tx.set(ref, {
-      seq,
-      code,
-      table: Number(table),
-      items,
-      total,
-      payMethod,
-      name: name || "",
-      note: note || "",
-      paid: false,
-      paymentClaimed: false,
-      status: "new",
+      seq, code, table: Number(table), items, total, payMethod,
+      name: name || "", note: note || "",
+      paid: false, paymentClaimed: false, status: "new",
       createdAt: serverTimestamp(),
     });
   });
   return { id: ref.id, code };
 }
 
-/** Live single order (customer status page). */
-export function watchOrder(id, cb) {
+function watchOrderFB(id, cb) {
   return onSnapshot(doc(db, "orders", id), (s) =>
     cb(s.exists() ? { id: s.id, ...s.data(), createdAt: ms(s.data().createdAt) } : null)
   );
 }
 
-/** Live order feed (employee app). handler(orders, addedOrders). */
-export function watchOrders(handler) {
+function watchOrdersFB(handler) {
   const q = query(collection(db, "orders"), orderBy("createdAt", "desc"), limit(200));
   return onSnapshot(q, (snap) => {
     const map = (d) => ({ id: d.id, ...d.data(), createdAt: ms(d.data().createdAt) });
@@ -76,4 +68,9 @@ export function watchOrders(handler) {
   });
 }
 
-export const setOrder = (id, patch) => updateDoc(doc(db, "orders", id), patch);
+const setOrderFB = (id, patch) => updateDoc(doc(db, "orders", id), patch);
+
+export const createOrder = firebaseReady ? createOrderFB : demo.createOrder;
+export const watchOrder = firebaseReady ? watchOrderFB : demo.watchOrder;
+export const watchOrders = firebaseReady ? watchOrdersFB : demo.watchOrders;
+export const setOrder = firebaseReady ? setOrderFB : demo.setOrder;
