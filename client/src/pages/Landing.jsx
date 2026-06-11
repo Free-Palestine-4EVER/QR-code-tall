@@ -31,7 +31,7 @@ export default function Landing() {
         </div>
 
         <div style={{ marginTop: 40, display: "flex", justifyContent: "center" }}>
-          <Link to="/staff" className="abtn">{t.staffApp} →</Link>
+          <Link to="/employee" className="abtn">{t.staffApp} →</Link>
         </div>
       </motion.div>
 

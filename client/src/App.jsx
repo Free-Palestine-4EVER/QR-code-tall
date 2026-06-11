@@ -20,6 +20,7 @@ export default function App() {
       <Route path="/t/:table" element={<Menu />} />
       <Route path="/t/:table/checkout" element={<Checkout />} />
       <Route path="/t/:table/order/:orderId" element={<Status />} />
+      <Route path="/employee" element={<Staff />} />
       <Route path="/staff" element={<Staff />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
